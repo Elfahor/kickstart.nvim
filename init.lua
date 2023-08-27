@@ -122,6 +122,14 @@ require('lazy').setup({
   -- UI improvements
   'stevearc/dressing.nvim',
 
+  -- Markdown preview
+  {
+    'iamcco/markdown-preview.nvim',
+    build = function(self)
+      vim.fn["mkdp#util#install"]()
+    end
+  },
+
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -283,7 +291,8 @@ require('lazy').setup({
 vim.o.hlsearch = false
 vim.cmd("highlight IndentBlanklineContextChar guifg=#45475a gui=nocombine")
 
-vim.o.shell = '/bin/bash'
+-- yes we rely on $PATH. otherwise it doesn't work on NixOS.
+vim.o.shell = 'bash'
 
 -- Make line numbers default
 vim.wo.number = true
@@ -450,7 +459,8 @@ require('nvim-treesitter.configs').setup {
 -- An equivalent of ToggleTerm
 vim.keymap.set('n', '<leader>th',
   function()
-    vim.fn.system('{ tmux split; tmux resize-pane -t {bottom} -D 10; } &')
+    vim.fn.system('tmux split')
+    vim.fn.system('tmux resize-pane -t {bottom} -D 10')
   end,
   { desc = 'Open terminal in tmux split' }
 )
